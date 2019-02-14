@@ -49,6 +49,7 @@ m = ConcreteModel()
 
 # Sets, Parameters, and Variables
 m.N = RangeSet(0,n+1)
+m.CN = RangeSet(0,n)
 
 # Variables
 m.u = Var(m.N, within=Reals)
