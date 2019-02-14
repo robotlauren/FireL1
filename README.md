@@ -1,1 +1,18 @@
 # FireL1
+
+Script to optimize fire-arrival time estimation using L<sup>1</sup> mimimization
+
+Developed on Windows 10 using Python 2.7.x
+by Lauren Hearn, February 2018
+***
+Dependencies:
+numpy, matplotlib, pyomo
+
+A note on Pyomo:
+Before running, install pyomo via `conda install -c conda-forge pyomo`
+and install all dependencies of pyomo with `conda install -c conda-forge pyomo.extras`
+
+From the Pyomo website:
+> Pyomo does not include any stand-alone optimization solvers. Consequently, most users will need to install third-party solvers to analyze optimization models built with Pyomo.
+Note that Pyomo can remote launch optimization solvers on NEOS.  However, this requires the installation of the pyomo "extras".
+
