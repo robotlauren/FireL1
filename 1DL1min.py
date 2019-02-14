@@ -1,3 +1,12 @@
+'''
+Script to optimize fire-arrival time estimation using L^1 mimimization
+Developed on Windows 10 using Python 2.7.x
+by Lauren Hearn, February 2018
+---
+Dependencies:
+numpy, matplotlib, pyomo
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
