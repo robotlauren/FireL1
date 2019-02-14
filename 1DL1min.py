@@ -27,10 +27,10 @@ def Bds(n): #artificial data generator
         s[i] = abs(.5-x[i])
         rand[i] = rd.random()
         if rand[i] > 0.5:
-            Up[i] = s[i] - rand[i]*eps
+            Up[i] = s[i] + rand[i]*eps
             Lo[i] = s[i] - rand[i]*eps
         else:
-            Up[i] = -1
+            Up[i] = 1
             Lo[i] = -1
     return Up, Lo
 
