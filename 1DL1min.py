@@ -60,11 +60,11 @@ m.b = Var(m.N, within=NonNegativeReals)
 #NOTE: think of a_i, b_i as slack variables
 def LBound(m, i):
     return (-m.u[i-1] + 2*m.u[i] - m.u[i+1])/h**2 + m.a[i] >= 0
-m.Size = Constraint(m.N, rule=LBound)
+m.Lower = Constraint(m.CN, rule=LBound)
 
 def UBound(m, i):
     return (-m.u[i-1] + 2*m.u[i] - m.u[i+1])/h**2 - m.b[i] <= 0
-m.Size = Constraint(m.N, rule=LBound)
+m.Upper = Constraint(m.CN, rule=LBound)
 
 def X_Bounds(m, i):
     return (Lo[i], m.u[i], Up[i])
@@ -73,9 +73,6 @@ m.Xbound = Constraint(m.N, rule=X_Bounds)
 # # Objective function
 def ObjRule(m):
     return sum(m.a[i] for i in m.N) + sum(m.b[i] for i in m.N)
-
-# def ObjRule(m):
-#     return sum(abs(-m.u[i-1] + 2*m.u[i] - m.u[i+1]/h^2) for i in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('glpk')
