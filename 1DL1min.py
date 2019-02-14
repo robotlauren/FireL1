@@ -48,8 +48,8 @@ from pyomo.opt import SolverFactory
 m = ConcreteModel()
 
 # Sets, Parameters, and Variables
-m.N = RangeSet(0,n+1)
-m.CN = RangeSet(0,n)
+m.N = RangeSet(0,n-1)
+m.CN = RangeSet(1,n-2)
 
 # Variables
 m.u = Var(m.N, within=Reals)
