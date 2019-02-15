@@ -76,7 +76,7 @@ def ObjRule(m):
     return sum(m.a[i] for i in m.N) + sum(m.b[i] for i in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
-opt = SolverFactory('cplex')
+opt = SolverFactory('glpk')
 results = opt.solve(m)
 
 print results
