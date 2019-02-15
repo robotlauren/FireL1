@@ -81,7 +81,7 @@ print(results)
 
 #plot results
 for i in range(1,n):
-    plt.scatter(i, m.u[i].value)
+    plt.scatter(i, m.u[i].value, c='black',marker='.')
 
 plt.xlabel('Location x_i')
 plt.ylabel('Fire Arrival time u(x_i)')
