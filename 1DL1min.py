@@ -6,10 +6,8 @@ by Lauren Hearn, February 2018
 Dependencies:
 numpy, matplotlib, pyomo
 '''
-
-import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('ggplot')
+import numpy as np
 import random as rd
 
 n=10
@@ -79,4 +77,13 @@ m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('glpk')
 results = opt.solve(m)
 
-print results
+print(results)
+
+#plot results
+for i in range(1,n):
+    plt.scatter(i, m.u[i].value)
+
+plt.xlabel('Location x_i')
+plt.ylabel('Fire Arrival time u(x_i)')
+plt.title('1D L^1 Minimization')
+plt.show()
