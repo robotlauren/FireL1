@@ -1,5 +1,6 @@
 '''
-Script to optimize fire-arrival time estimation using L^1 mimimization
+Script to optimize fire-arrival time estimation 
+in 1 dimension using L^1 mimimization
 Developed on Windows 10 using Python 2.7.x
 by Lauren Hearn, February 2018
 ---
