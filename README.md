@@ -5,7 +5,7 @@ Script to optimize fire-arrival time estimation using L<sup>1</sup> mimimization
 Developed on Windows 10 using Python 2.7.x
 by Lauren Hearn, February 2018
 ***
-## Dependencies:
+## 1D Dependencies:
 numpy, matplotlib, pyomo
 
 A note on Pyomo:
@@ -16,5 +16,11 @@ From the Pyomo website:
 > Pyomo does not include any stand-alone optimization solvers. Consequently, most users will need to install third-party solvers to analyze optimization models built with Pyomo.
 Note that Pyomo can remote launch optimization solvers on NEOS.  However, this requires the installation of the pyomo "extras".
 
-We use the GLPK solver, here, which can be installed via `conda install glpk`
+We use the **GLPK** solver, here, which can be installed via `conda install glpk`
 
+## 2D Dependencies:
+(All of the above, plus:)
+
+Solver: **ipopt**
+
+Ipopt is an opensource, nonlinear solver. Info on installing can be found [here](https://www.coin-or.org/Ipopt/documentation/).
