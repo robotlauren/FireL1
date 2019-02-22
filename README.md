@@ -23,4 +23,4 @@ We use the **GLPK** solver, here, which can be installed via `conda install glpk
 
 Solver: **ipopt**
 
-Ipopt is an opensource, nonlinear solver. Info on installing can be found [here](https://www.coin-or.org/Ipopt/documentation/).
+Ipopt is an opensource, nonlinear solver that uses the interior point method. Info on installing can be found [here](https://www.coin-or.org/Ipopt/documentation/).
