@@ -1,3 +1,13 @@
+'''
+Script to optimize fire-arrival time estimation 
+in 2 dimensions using L^1 mimimization
+Developed on Windows 10 using Python 2.7.x
+by Lauren Hearn, February 2018
+---
+Dependencies:
+numpy, matplotlib, pyomo
+(see README file)
+'''
 #2d Case
 import matplotlib.pyplot as plt
 from pyomo.environ import *
@@ -12,18 +22,32 @@ n = 10
 dx=1./p
 dy=1./n
 
+# def Bds(p,n):
+#     Up = np.zeros((p,n))
+#     Lo = np.zeros((p,n))
+#     x = np.zeros((p,n))
+#     s = np.zeros((p,n))
+#     for i in range(p):
+#         for j in range(n):
+#             x[i,j] = [i*dx,j*dy]
+#             s[i,j] = np.linalg.norm([.5,.5]-x[i,j])
+#             if rd.random() > 0.5:
+#                 Up[i,j] = s[i,j] + rd.random()*eps
+#                 Lo[i,j] = s[i,j] - rd.random()*eps
+#             else:
+#                 Up[i,j] = 1
+#                 Lo[i,j] = -1
+#     return Up, Lo
+
+# simple artificial data
 def Bds(p,n):
     Up = np.zeros((p,n))
     Lo = np.zeros((p,n))
-    x = np.zeros((p,n))
-    s = np.zeros((p,n))
     for i in range(p):
         for j in range(n):
-            x[i,j] = [i*dx,j*dy]
-            s[i,j] = np.linalg.norm([.5,.5]-x[i,j])
             if rd.random() > 0.5:
-                Up[i,j] = s[i,j] + rd.random()*eps
-                Lo[i,j] = s[i,j] - rd.random()*eps
+                Up[i,j] = 0.5 + rd.random()*eps
+                Lo[i,j] = 0.5 - rd.random()*eps
             else:
                 Up[i,j] = 1
                 Lo[i,j] = -1
@@ -81,14 +105,13 @@ m.Uyx = Constraint(m.CM, m.CN, rule=Uyx)
 
 # Upper and lower bounds 
 # NOTE: think of a_i, b_i as slack variables
-def LBound(m,i,j):
-    return sqrt(m.u_xx[i,j]*m.u_xx[i,j] + m.u_yy[i,j]*m.u_yy[i,j] + m.u_xy[i,j]*m.u_xy[i,j]
-                + m.u_yx[i,j]*m.u_yx[i,j]) + m.a[i,j] >= 0
+
+def LBound(m,i,j): #todo - linearize these 2 constraints - maybe make into multiples?
+    return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) + m.a[i,j] >= 0
 m.Lower = Constraint(m.CM, m.CN, rule=LBound)
 
 def UBound(m,i,j):
-    return sqrt(m.u_xx[i,j]*m.u_xx[i,j] + m.u_yy[i,j]*m.u_yy[i,j] + m.u_xy[i,j]*m.u_xy[i,j]
-                + m.u_yx[i,j]*m.u_yx[i,j]) - m.b[i,j]<= 0
+    return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) - m.b[i,j]<= 0
 m.Upper = Constraint(m.CM, m.CN, rule=LBound)
 
 def X_BoundU(m,i,j):

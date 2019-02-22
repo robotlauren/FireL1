@@ -59,7 +59,7 @@ m.b = Var(m.N, within=NonNegativeReals)
 # Upper and lower bounds 
 #NOTE: think of a_i, b_i as slack variables
 def LBound(m, i):
-    return (-m.u[i-1] + 2*m.u[i] - m.u[i+1])/h**2 + m.a[i] >= 0
+    return (-m.u[i-1] + 2*m.u[i] - m.u[i+1])/h**2 + m.a[i] >= 0 #center difference approx
 m.Lower = Constraint(m.CN, rule=LBound)
 
 def UBound(m, i):
