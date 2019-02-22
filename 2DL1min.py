@@ -103,16 +103,26 @@ def Uyx(m,i,j):
     return m.u_yx[i,j] == ( (m.u[i+1,j+1]-m.u[i+1,j-1])/(2*dy) - (m.u[i-1,j+1]-m.u[i-1,j-1])/(2*dy) )/(2*dx)
 m.Uyx = Constraint(m.CM, m.CN, rule=Uyx)
 
-# Upper and lower bounds 
+# Upper and lower bounds - will need nl solver for this - looking into ipopt
 # NOTE: think of a_i, b_i as slack variables
 
-def LBound(m,i,j): #todo - linearize these 2 constraints - maybe make into multiples?
-    return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) + m.a[i,j] >= 0
+def LBound(m,i,j):
+    return sqrt(m.u_xx[i,j]*m.u_xx[i,j] + m.u_yy[i,j]*m.u_yy[i,j] + m.u_xy[i,j]*m.u_xy[i,j]
+                + m.u_yx[i,j]*m.u_yx[i,j]) + m.a[i,j] >= 0
 m.Lower = Constraint(m.CM, m.CN, rule=LBound)
 
 def UBound(m,i,j):
-    return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) - m.b[i,j]<= 0
+    return sqrt(m.u_xx[i,j]*m.u_xx[i,j] + m.u_yy[i,j]*m.u_yy[i,j] + m.u_xy[i,j]*m.u_xy[i,j]
+                + m.u_yx[i,j]*m.u_yx[i,j]) - m.b[i,j]<= 0
 m.Upper = Constraint(m.CM, m.CN, rule=LBound)
+
+# def LBound(m,i,j): # wrong - still need euclideam norm inside
+#     return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) + m.a[i,j] >= 0
+# m.Lower = Constraint(m.CM, m.CN, rule=LBound)
+
+# def UBound(m,i,j):
+#     return abs(m.u_xx[i,j]) + abs(m.u_yy[i,j]) +abs(m.u_xy[i,j]) + abs(m.u_yx[i,j]) - m.b[i,j]<= 0
+# m.Upper = Constraint(m.CM, m.CN, rule=LBound)
 
 def X_BoundU(m,i,j):
     return m.u[i,j] - Up[i,j] - m.xi[i,j] <= 0
