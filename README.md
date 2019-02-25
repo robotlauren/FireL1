@@ -28,6 +28,8 @@ We use the **GLPK** solver, here, which can be installed via `conda install glpk
 Solver: **ipopt**
 
 Ipopt is an opensource, nonlinear solver that uses the interior point method. Info on installing can be found [here](https://www.coin-or.org/Ipopt/documentation/).
+
+Or install via conda  using `conda install -q -y --channel cachemeorg ipopt_bin` (Note: conda uses an older version of ipopt)
 #### TODOs:
 - [ ] get ipopt working to test
 - [ ] make artificial data generation more robust
