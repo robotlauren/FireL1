@@ -45,8 +45,8 @@ def Bds(p,n):
 
 #test stuff
 Up,Lo = Bds(p,n)
-print(Up)
-print(Lo)
+# print(Up)
+# print(Lo)
 
 #find constant values that work
 c1 = 1
