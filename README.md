@@ -35,3 +35,4 @@ Or install via conda (**better**) using `conda install -q -y --channel cachemeor
 - [ ] make artificial data generation more robust
 - [x] add plotting
 > - [ ] plot as surface vs. 3d scatter 
+- [ ] test with real data
