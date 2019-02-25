@@ -10,6 +10,8 @@ numpy, matplotlib, pyomo
 '''
 #2d Case
 import matplotlib.pyplot as plt
+import numpy as np
+import random as rd
 from pyomo.environ import *
 from pyomo.dae import *
 from pyomo.opt import SolverFactory
@@ -77,14 +79,25 @@ m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 def ObjRule(m):
     return dx*dy*(
         sum(
-            sum((
+            sum(sqrt((
                 (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
                 (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
-                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2 for i in m.CM) 
-            for j in m.CN))**(0.5) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
+                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
+            for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('ipopt')
 results = opt.solve(m)
 
 print(results)
+
+#plot results
+ax = plt.subplot(3,1,3, projection='3d')
+
+for i in range(1,p):
+    for j in range(1,n):
+        ax.plot_surface(i, j, m.u[i,j], cmap=cm.jet)
+plt.xlabel('Location x_ij')
+plt.ylabel('Fire Arrival time u(x_ij)')
+plt.title('2D L^1 Minimization')
+plt.show()
