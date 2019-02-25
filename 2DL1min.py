@@ -8,11 +8,13 @@ Dependencies:
 numpy, matplotlib, pyomo
 (see README file)
 '''
-#2d Case
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+
 import numpy as np
 import random as rd
+
 from pyomo.environ import *
 from pyomo.dae import *
 from pyomo.opt import SolverFactory
@@ -95,10 +97,11 @@ print(results)
 
 #plot results
 ax = plt.subplot(projection='3d')
-
+z = np.zeros((p,n))
 for i in range(1,p):
     for j in range(1,n):
-        ax.scatter(i, j, m.u[i,j].value, c='black',marker='.')
+        z[i,j] = m.u[i,j].value
+        ax.scatter(i, j, z[i,j], c='black',marker='.')
 ax.set_xlabel('Location x_ij')
 ax.set_zlabel('Fire Arrival time u(x_ij)')
 ax.set_title('2D L^1 Minimization')
