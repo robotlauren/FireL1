@@ -29,8 +29,9 @@ Solver: **ipopt**
 
 Ipopt is an opensource, nonlinear solver that uses the interior point method. Info on installing can be found [here](https://www.coin-or.org/Ipopt/documentation/).
 
-Or install via conda  using `conda install -q -y --channel cachemeorg ipopt_bin` (Note: conda uses an older version of ipopt)
+Or install via conda (**better**) using `conda install -q -y --channel cachemeorg ipopt_bin` (Note: conda uses an older version of ipopt)
 #### TODOs:
-- [ ] get ipopt working to test
+- [x] get ipopt working to test
 - [ ] make artificial data generation more robust
-- [ ] add plotting
+- [x] add plotting
+> - [ ] plot as surface vs. 3d scatter 
