@@ -10,6 +10,7 @@ numpy, matplotlib, pyomo
 '''
 #2d Case
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import random as rd
 from pyomo.environ import *
@@ -57,7 +58,7 @@ m.N = RangeSet(0,n-1)
 m.CN = RangeSet(1,n-2) #constraint indeces
 
 # Variables
-m.u = Var(m.M, m.N, within=Reals)
+m.u = Var(m.M, m.N, within=Reals, initialize=1.0)
 
 # soft constraints
 m.eta = Var(m.M, m.N, within=NonNegativeReals)
@@ -76,13 +77,14 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Objective function
+# maybe we don't need sqrt for minimization?
 def ObjRule(m):
     return dx*dy*(
         sum(
-            sum(sqrt((
+            sum((
                 (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
                 (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
-                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
+                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2 for i in m.CM) 
             for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
@@ -92,12 +94,12 @@ results = opt.solve(m)
 print(results)
 
 #plot results
-ax = plt.subplot(3,1,3, projection='3d')
+ax = plt.subplot(projection='3d')
 
 for i in range(1,p):
     for j in range(1,n):
-        ax.plot_surface(i, j, m.u[i,j], cmap=cm.jet)
-plt.xlabel('Location x_ij')
-plt.ylabel('Fire Arrival time u(x_ij)')
-plt.title('2D L^1 Minimization')
+        ax.scatter(i, j, m.u[i,j].value, c='black',marker='.')
+ax.set_xlabel('Location x_ij')
+ax.set_zlabel('Fire Arrival time u(x_ij)')
+ax.set_title('2D L^1 Minimization')
 plt.show()
