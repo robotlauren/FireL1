@@ -22,7 +22,7 @@ from pyomo.dae import *
 from pyomo.opt import SolverFactory
 
 #generate artificial data for 2d case
-eps = 0.1
+eps = 0.0001
 # p,n = size(u)
 p = 10
 n = 10
@@ -85,10 +85,10 @@ m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 def ObjRule(m):
     return dx*dy*(
         sum(
-            sum((
+            sum(sqrt(eps + (
                 (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
                 (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
-                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2 for i in m.CM) 
+                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
             for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
