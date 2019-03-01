@@ -24,8 +24,8 @@ from pyomo.opt import SolverFactory
 #generate artificial data for 2d case
 eps = 0.0001
 # p,n = size(u)
-p = 100
-n = 100
+p = 300
+n = 300
 dx=1./p
 dy=1./n
 
