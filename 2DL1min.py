@@ -103,7 +103,7 @@ z = np.zeros((p,n))
 for i in range(1,p):
     for j in range(1,n):
         z[i,j] = m.u[i,j].value
-        ax.plot_surface(i, j, z[i,j])
+        ax.plot_surface(i, j, z)
 ax.set_xlabel('Location x_ij')
 ax.set_zlabel('Fire Arrival time u(x_ij)')
 ax.set_title('2D L^1 Minimization')
