@@ -22,12 +22,13 @@ from pyomo.dae import *
 from pyomo.opt import SolverFactory
 
 #generate artificial data for 2d case
-eps = 0.0001
 # p,n = size(u)
 p = 200
 n = 200
 dx=1./p
 dy=1./n
+
+eps = 0.001*dx
 
 # simple artificial data
 def Bds(p,n):
@@ -107,7 +108,7 @@ for i in range(1,p):
         z[i,j] = m.u[i,j].value
         x[i] = i
         y[j] = j
-ax.plot_surface(x, y, z)
+ax.plot_surface(x, y, z, cmap='jet')
 ax.set_xlabel('Location x_ij')
 ax.set_zlabel('Fire Arrival time u(x_ij)')
 ax.set_title('2D L^1 Minimization')
