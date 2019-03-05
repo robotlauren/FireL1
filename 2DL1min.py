@@ -108,7 +108,7 @@ for i in range(1,p):
         z[i,j] = m.u[i,j].value
         x[i] = i
         y[j] = j
-ax.plot_surface(x, y, z, cmap='jet')
+ax.plot_wireframe(x, y, z, cmap='jet')
 ax.set_xlabel('Location x_ij')
 ax.set_zlabel('Fire Arrival time u(x_ij)')
 ax.set_title('2D L^1 Minimization')
