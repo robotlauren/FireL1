@@ -37,11 +37,11 @@ def Bds(p,n):
     for i in range(p):
         for j in range(n):
             if rd.random() > 0.5:
-                Up[i,j] = 0.5 + rd.random()*eps
-                Lo[i,j] = 0.5 - rd.random()*eps
+                Up[i,j] = 0.6 + rd.random()*eps
+                Lo[i,j] = 0.4 - rd.random()*eps
             else:
                 Up[i,j] = 1
-                Lo[i,j] = -1
+                Lo[i,j] = 0
     return Up, Lo
 
 #test stuff
