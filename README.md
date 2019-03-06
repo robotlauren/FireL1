@@ -32,7 +32,7 @@ Ipopt is an opensource, nonlinear solver that uses the interior point method. In
 Or install via conda (**better**) using `conda install -q -y --channel cachemeorg ipopt_bin` (Note: conda uses an older version of ipopt)
 #### TODOs:
 - [x] get ipopt working to test
-- [ ] make artificial data generation more robust
 - [x] add plotting
-> - [ ] plot as surface vs. 3d scatter 
-- [ ] test with real data
+> - [x] plot as contour vs. 3d scatter 
+- [ ] make artificial data generation more robust
+- [x] test with real data _note: still getting stuck in polecreek data (386x386 mesh)_
