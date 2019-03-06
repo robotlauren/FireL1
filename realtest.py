@@ -1,7 +1,6 @@
 import scipy.io as sio
 import sys
 import os
-from svm3test import SVM3, primes_generator
 from scipy.io import loadmat
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
