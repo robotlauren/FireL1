@@ -56,9 +56,11 @@ ll[mk] = uu.max()-.2
 Up = np.reshape(uu, U.shape)
 Lo = np.reshape(ll, L.shape)
 p,n = Up.shape
+dx = 1./p
+dy = 1./n
 
 #epsilon as function of h
-eps = 0.001/p
+eps = 0.001*dx
 
 #find constant values that work
 c1 = 1
