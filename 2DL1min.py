@@ -46,8 +46,14 @@ def Bds(p,n):
 
 #test stuff
 Up,Lo = Bds(p,n)
-# print(Up)
-# print(Lo)
+x, y = np.meshgrid(np.linspace(0,1,p),np.linspace(0,1,n))
+
+fig1 = plt.figure()
+ax1 = fig1.gca(projection='3d')
+fig1.suptitle("Plotting the data scaled to fit")
+ax1.scatter(x, y, Up, c='red')
+ax1.scatter(x, y, Lo, c='blue')
+plt.show()
 
 #find constant values that work
 c1 = 1
@@ -99,17 +105,14 @@ results = opt.solve(m)
 print(results)
 
 #plot results
-ax = plt.subplot(projection='3d')
+fig2 = plt.figure()
+ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
-x = np.zeros(p)
-y = np.zeros(n)
 for i in range(1,p):
     for j in range(1,n):
         z[i,j] = m.u[i,j].value
-        x[i] = i
-        y[j] = j
-ax.plot_wireframe(x, y, z, cmap='jet')
-ax.set_xlabel('Location x_ij')
-ax.set_zlabel('Fire Arrival time u(x_ij)')
-ax.set_title('2D L^1 Minimization')
+ax2.plot_surface(x, y, z, cmap='jet')
+ax2.set_xlabel('Location x_ij')
+ax2.set_zlabel('Fire Arrival time u(x_ij)')
+ax2.set_title('2D L^1 Minimization')
 plt.show()
