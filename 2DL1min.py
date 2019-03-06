@@ -53,7 +53,6 @@ ax1 = fig1.gca(projection='3d')
 fig1.suptitle("Plotting the data scaled to fit")
 ax1.scatter(x, y, Up, c='red')
 ax1.scatter(x, y, Lo, c='blue')
-plt.show()
 
 #find constant values that work
 c1 = 1
