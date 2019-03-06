@@ -2,13 +2,12 @@ import scipy.io as sio
 import sys
 import os
 from scipy.io import loadmat
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-import numpy as np
-
 import matplotlib as mpl
 mpl.use('TKAgg')
 from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
 import random as rd
 
 from pyomo.environ import *
