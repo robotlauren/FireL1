@@ -25,7 +25,6 @@ if (not os.path.isfile(matlab_file)) or (not os.access(matlab_file,os.R_OK)):
 
 mat = loadmat(sys.argv[1])
 case = sys.argv[1].split('/')[-1].split('.mat')[0]
-# scale = mat['time_scale_num'][0]
 X = mat['X']
 Y = mat['Y']
 
@@ -56,14 +55,12 @@ m.CN = RangeSet(1,n-2) #constraint indeces
 # Variables
 m.u = Var(m.M, m.N, within=Reals)
 
+# Constraints
 # soft constraints
 m.eta = Var(m.M, m.N, within=NonNegativeReals)
 m.xi = Var(m.M, m.N, within=NonNegativeReals)
 
-# Constraints
-
-# Upper and lower bounds - will need nl solver for this - looking into ipopt
-
+# Upper and lower bounds
 def X_BoundU(m,i,j):
     return m.u[i,j] - Up[i,j] - m.xi[i,j] <= 0
 m.XboundU = Constraint(m.M, m.N, rule=X_BoundU)
@@ -73,7 +70,6 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Objective function
-# maybe we don't need sqrt for minimization?
 def ObjRule(m):
     return dx*dy*(
         sum(
