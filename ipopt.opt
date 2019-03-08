@@ -1,0 +1,4 @@
+# Option fileforIpopt solver for L1 algorithms
+
+# Turn off the NLP scaling
+nlp_scaling_method gradient-based
