@@ -96,7 +96,7 @@ z = np.zeros((p,n))
 for i in range(1,p):
     for j in range(1,n):
         z[i,j] = m.u[i,j].value
-ax2.contour(x, y, z, cmap='jet')
+ax2.contour(X, Y, z, cmap='jet')
 ax2.set_xlabel('Location x_ij')
 ax2.set_zlabel('Fire Arrival time u(x_ij)')
 ax2.set_title('2D L^1 Minimization')
