@@ -38,9 +38,9 @@ Y = mat['Y']
 # U = U/tscale
 # L = L/tscale
 # make sure all upper bounds > lower bounds
-print 'U>L: ',(U>L).sum()
-print 'U<L: ',(U<L).sum()
-print 'U==L: ',(U==L).sum()
+# print 'U>L: ',(U>L).sum()
+# print 'U<L: ',(U<L).sum()
+# print 'U==L: ',(U==L).sum()
 
 # uu = np.reshape(U,np.prod(U.shape))
 # ll = np.reshape(L,np.prod(L.shape))
