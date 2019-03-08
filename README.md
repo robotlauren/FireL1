@@ -3,7 +3,7 @@
 Script to optimize fire-arrival time estimation using L<sup>1</sup> mimimization
 
 Developed on Windows 10 using Python 2.7.x
-by Lauren Hearn, February 2018
+by Lauren Hearn, February/March 2018
 ***
 ## 1D:
 
@@ -36,3 +36,4 @@ Or install via conda (**better**) using `conda install -q -y --channel cachemeor
 > - [x] plot as contour vs. 3d scatter 
 - [ ] make artificial data generation more robust
 - [x] test with real data _note: still getting stuck in polecreek data (386x386 mesh)_
+- [ ] figure out how to pre-condition problem to prevent getting stuck for large mesh size
