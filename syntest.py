@@ -25,33 +25,14 @@ if (not os.path.isfile(matlab_file)) or (not os.access(matlab_file,os.R_OK)):
 
 mat = loadmat(sys.argv[1])
 case = sys.argv[1].split('/')[-1].split('.mat')[0]
-scale = mat['time_scale_num'][0]
-LON = mat['fxlon']
-lon = np.reshape(LON,np.prod(LON.shape)).astype(float)
-LAT = mat['fxlat']
-lat = np.reshape(LAT,np.prod(LAT.shape)).astype(float)
-T = np.array(mat['T']).astype(float)
-time scaling (to days)
-tscale = 24*3600
-U = U/tscale
-L = L/tscale
-# make sure all upper bounds > lower bounds
-print 'U>L: ',(U>L).sum()
-print 'U<L: ',(U<L).sum()
-print 'U==L: ',(U==L).sum()
+# scale = mat['time_scale_num'][0]
+X = mat['X']
+Y = mat['Y']
 
-uu = np.reshape(U,np.prod(U.shape))
-ll = np.reshape(L,np.prod(L.shape))
-# create mask
-tt = np.reshape(T,np.prod(T.shape))
-mk = tt==scale[1]-scale[0]
-# make values outside of mask large
-uu[mk] = uu.max()
-ll[mk] = uu.max()-.2
+# Upper and Lower bounds for synthetic test
+Up = np.array(mat['U']).astype(float)
+Lo = np.array(mat['L']).astype(float)
 
-# final Upper and Lower bounds
-Up = np.reshape(uu, U.shape)
-Lo = np.reshape(ll, L.shape)
 p,n = Up.shape
 dx = 1./p
 dy = 1./n
