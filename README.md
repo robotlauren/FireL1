@@ -37,3 +37,4 @@ Or install via conda (**better**) using `conda install -q -y --channel cachemeor
 - [ ] make artificial data generation more robust
 - [x] test with real data _note: still getting stuck in polecreek data (386x386 mesh)_
 - [ ] figure out how to pre-condition problem to prevent getting stuck for large mesh size
+ > - [x] add vector field, 1st-order derivatives (TGV method)
