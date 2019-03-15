@@ -31,7 +31,7 @@ lon = np.reshape(LON,np.prod(LON.shape)).astype(float)
 LAT = mat['fxlat']
 lat = np.reshape(LAT,np.prod(LAT.shape)).astype(float)
 T = np.array(mat['T']).astype(float)
-time scaling (to days)
+#time scaling (to days)
 tscale = 24*3600
 U = U/tscale
 L = L/tscale
