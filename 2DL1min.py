@@ -57,6 +57,7 @@ ax1.scatter(x, y, Lo, c='blue')
 #find constant values that work
 c1 = 1
 c2 = 1
+c3 = 10
 
 m = ConcreteModel()
 
@@ -68,7 +69,11 @@ m.N = RangeSet(0,n-1)
 m.CN = RangeSet(1,n-2) #constraint indeces
 
 # Variables
-m.u = Var(m.M, m.N, within=Reals, initialize=1.0)
+m.u = Var(m.M, m.N, within=Reals)
+m.v = Var(m.M, m.N, within=Reals) #new vector field
+# Partials of u
+m.ux = Var(m.M, m.N, within=Reals)
+m.uy = Var(m.M, m.N, within=Reals)
 
 # soft constraints
 m.eta = Var(m.M, m.N, within=NonNegativeReals)
@@ -76,8 +81,7 @@ m.xi = Var(m.M, m.N, within=NonNegativeReals)
 
 # Constraints
 
-# Upper and lower bounds - will need nl solver for this - looking into ipopt
-
+# Upper and lower bounds 
 def X_BoundU(m,i,j):
     return m.u[i,j] - Up[i,j] - m.xi[i,j] <= 0
 m.XboundU = Constraint(m.M, m.N, rule=X_BoundU)
@@ -86,16 +90,22 @@ def X_BoundL(m,i,j):
     return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
+#grad U
+for i in range(1,n-2):
+    for j in range(1,p-2):
+        m.ux[i,j] == (m.u[i+1,j]-m.u[i-1,j])/(2*dx)
+        m.uy[i,j] == (m.u[i,j+1]-m.u[i,j-1])/(2*dy)
+
 # Objective function
-# maybe we don't need sqrt for minimization?
 def ObjRule(m):
-    return dx*dy*(
-        sum(
-            sum(sqrt(eps + (
-                (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
-                (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
-                (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
-            for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
+    return c3*sum(
+        sum((m.ux[i,j] - m.v[i,j])**2+(m.uy[i,j]-m.v[i,j])**2 for i in m.CM) for j in m.CN)*dx*dy + 
+            dx*dy*(sum(
+                sum(sqrt(eps + (
+                    (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
+                    (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
+                    (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
+                for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('ipopt')
