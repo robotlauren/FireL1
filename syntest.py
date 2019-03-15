@@ -32,6 +32,12 @@ Y = mat['Y']
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
+fig1 = plt.figure()
+ax1 = fig1.gca(projection='3d')
+fig1.suptitle("Plotting the data scaled to fit")
+ax1.scatter(X, Y, Up, c='red')
+ax1.scatter(X, Y, Lo, c='blue')
+
 p,n = Up.shape
 dx = 1./p
 dy = 1./n
