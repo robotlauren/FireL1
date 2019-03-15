@@ -103,8 +103,7 @@ for i in range(1,n-2):
 # Objective function
 def ObjRule(m):
     return c3*sum(
-        sum((m.ux[i,j] - m.v[i,j])**2+(m.uy[i,j]-m.v[i,j])**2 for i in m.CM) for j in m.CN)*dx*dy + 
-            dx*dy*(sum(
+        sum((m.ux[i,j] - m.v[i,j])**2+(m.uy[i,j]-m.v[i,j])**2 for i in m.CM) for j in m.CN)*dx*dy + dx*dy*(sum(
                 sum(sqrt(eps + (
                     (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
                     (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
