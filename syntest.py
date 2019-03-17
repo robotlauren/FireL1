@@ -48,7 +48,8 @@ eps = 0.001*dx
 #find constant values that work
 c1 = 1
 c2 = 1
-c3 = 10
+c3 = 1
+c4 = 1
 
 m = ConcreteModel()
 
@@ -62,9 +63,6 @@ m.CN = RangeSet(1,n-2) #constraint indeces
 # Variables
 m.u = Var(m.M, m.N, within=Reals)
 m.v = Var(m.M, m.N, within=Reals) #new vector field
-# Partials of u
-m.ux = Var(m.M, m.N, within=Reals)
-m.uy = Var(m.M, m.N, within=Reals)
 
 # Constraints
 # soft constraints
@@ -80,21 +78,12 @@ def X_BoundL(m,i,j):
     return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
-#grad U
-for i in range(1,n-2):
-    for j in range(1,p-2):
-        m.ux[i,j] == (m.u[i+1,j]-m.u[i-1,j])/(2*dx)
-        m.uy[i,j] == (m.u[i,j+1]-m.u[i,j-1])/(2*dy)
-
 # Objective function
 def ObjRule(m):
-    return c3*sum(
-        sum((m.ux[i,j] - m.v[i,j])**2+(m.uy[i,j]-m.v[i,j])**2 for i in m.CM) for j in m.CN)*dx*dy + dx*dy*(sum(
-                sum(sqrt(eps + (
-                    (-m.u[i-1,j] + 2*m.u[i,j] - m.u[i+1,j])/dx**2)**2 + (
-                    (-m.u[i,j-1] + 2*m.u[i,j] -m.u[i,j+1])/dy**2)**2 + 2*(
-                    (m.u[i+1,j+1] - m.u[i-1,j+1] - m.u[i+1,j-1] + m.u[i-1,j-1])/(4*dx*dy))**2) for i in m.CM) 
-                for j in m.CN)) + c1*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c2*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
+    return c1*sum(sum(
+        sqrt(eps + ((m.u[i-1,j] + m.u[i+1,j])/2 - m.v[i,j])**2 + ((m.u[i,j-1] + m.u[i,j+1])/2 - m.v[i,j])**2) for i in m.CM)
+                for j in m.CN) + c2*sum(sum(((m.v[i-1,j] + m.v[i+1,j])/2) + ((m.v[i,j-1] + m.v[i,j+1])/2) for i in m.CM)
+            for j in m.CN) + c3*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c4*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('ipopt')
@@ -109,7 +98,7 @@ z = np.zeros((p,n))
 for i in range(1,p):
     for j in range(1,n):
         z[i,j] = m.u[i,j].value
-ax2.plot(X, Y, z, levels=100, cmap='jet')
+ax2.contour(X, Y, z, levels=100, cmap='jet')
 ax2.set_xlabel('Location x_ij')
 ax2.set_zlabel('Fire Arrival time u(x_ij)')
 ax2.set_title('2D L^1 Minimization')
