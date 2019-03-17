@@ -91,8 +91,8 @@ m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 # Objective function
 def ObjRule(m):
     return c1*sum(sum(
-        sqrt(eps + ((m.u[i-1,j] + m.u[i+1,j])/2 - m.v[i,j])**2 + ((m.u[i,j-1] + m.u[i,j+1])/2 - m.v[i,j])**2) for i in m.CM)
-                for j in m.CN) + c2*sum(sum(((m.v[i-1,j] + m.v[i+1,j])/2) + ((m.v[i,j-1] + m.v[i,j+1])/2) for i in m.CM)
+        sqrt(eps + ((m.u[i-1,j] + m.u[i+1,j])/(2*dx) - m.v[i,j])**2 + ((m.u[i,j-1] + m.u[i,j+1])/(2*dy) - m.v[i,j])**2) for i in m.CM)
+                for j in m.CN) + c2*sum(sum(((m.v[i-1,j] + m.v[i+1,j])/(2*dx)) + ((m.v[i,j-1] + m.v[i,j+1])/(2*dy)) for i in m.CM)
             for j in m.CN) + c3*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c4*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
