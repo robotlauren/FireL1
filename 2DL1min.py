@@ -89,13 +89,13 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # new obj. func for TGV:
-# note: sqrt taken out for testing purposes
+# note: eps under sqrt to avoid sqrt(0)
 def ObjRule(m):
     sum1 = sum(
-        sum(((m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
+        sum(sqrt(eps +(m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
             for i in m.CM) for j in m.CN)
     sum2 = sum(
-        sum((((m.v1[i+1,j] + m.v1[i-1,j])/(2*dx))**2+((m.v1[i,j+1]-m.v1[i,j-1])/(2*dy)+(m.v2[i+1,j]-m.v2[i-1,j])/(2*dx))**2/2+((m.v2[i,j+1]-m.v2[i,j-1])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
+        sum(sqrt(eps +((m.v1[i+1,j] + m.v1[i-1,j])/(2*dx))**2+((m.v1[i,j+1]-m.v1[i,j-1])/(2*dy)+(m.v2[i+1,j]-m.v2[i-1,j])/(2*dx))**2/2+((m.v2[i,j+1]-m.v2[i,j-1])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
     return c1*sum1 + sum2 + c2*sum(sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
