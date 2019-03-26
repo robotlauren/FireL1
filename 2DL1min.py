@@ -55,10 +55,9 @@ ax1.scatter(x, y, Up, c='red')
 ax1.scatter(x, y, Lo, c='blue')
 
 #find constant values that work
-c1 = 1
+c1 = 12
 c2 = 1
 c3 = 1
-c4 = 1
 
 m = ConcreteModel()
 
@@ -71,7 +70,8 @@ m.CN = RangeSet(1,n-2) #constraint indeces
 
 # Variables
 m.u = Var(m.M, m.N, within=Reals)
-m.v = Var(m.M, m.N, within=Reals) #new vector field
+m.v1 = Var(m.M, m.N, within=Reals)
+m.v2 = Var(m.M, m.N, within=Reals) #new vector field v=(v1,v2)
 
 # soft constraints
 m.eta = Var(m.M, m.N, within=NonNegativeReals)
@@ -88,12 +88,15 @@ def X_BoundL(m,i,j):
     return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
-# Objective function
+# new obj. func for TGV:
+# note: sqrt taken out for testing purposes
 def ObjRule(m):
-    return c1*sum(sum(
-        sqrt(eps + ((m.u[i-1,j] + m.u[i+1,j])/(2*dx) - m.v[i,j])**2 + ((m.u[i,j-1] + m.u[i,j+1])/(2*dy) - m.v[i,j])**2) for i in m.CM)
-                for j in m.CN) + c2*sum(sum(((m.v[i-1,j] + m.v[i+1,j])/(2*dx)) + ((m.v[i,j-1] + m.v[i,j+1])/(2*dy)) for i in m.CM)
-            for j in m.CN) + c3*sum(sum(m.xi[i,j] for i in m.M) for j in m.N) + c4*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
+    sum1 = sum(
+        sum(((m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
+            for i in m.CM) for j in m.CN)
+    sum2 = sum(
+        sum((((m.v1[i+1,j] + m.v1[i-1,j])/(2*dx))**2+((m.v1[i,j+1]-m.v1[i,j-1])/(2*dy)+(m.v2[i+1,j]-m.v2[i-1,j])/(2*dx))**2/2+((m.v2[i,j+1]-m.v2[i,j-1])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
+    return c1*sum1 + sum2 + c2*sum(sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('ipopt')
