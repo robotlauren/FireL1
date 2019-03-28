@@ -79,7 +79,7 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # new obj. func for TGV:
-# note: epa under sqrt to avoid sqrt(0)
+# note: eps under sqrt to avoid sqrt(0)
 def ObjRule(m):
     sum1 = sum(
         sum(((m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
@@ -98,8 +98,8 @@ print(results)
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
-for i in range(1,p):
-    for j in range(1,n):
+for i in range(p):
+    for j in range(n):
         z[i,j] = m.u[i,j].value
 ax2.plot_surface(X, Y, z, cmap='jet')
 ax2.set_xlabel('Location x_ij')

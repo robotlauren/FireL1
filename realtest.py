@@ -115,8 +115,8 @@ print(results)
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
-for i in range(1,p):
-    for j in range(1,n):
+for i in range(p):
+    for j in range(n):
         z[i,j] = m.u[i,j].value
 ax2.contour(LON, LAT, z, levels=100, cmap='jet')
 ax2.set_xlabel('Location x_ij')
