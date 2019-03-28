@@ -46,9 +46,9 @@ dy = 1./n
 eps = 0.001*dx
 
 #find constant values that work
-c1 = 12
-c2 = 1
-c3 = 1
+c1 = 10
+c2 = 100
+c3 = 100
 
 m = ConcreteModel()
 
