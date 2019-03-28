@@ -46,7 +46,7 @@ dy = 1./n
 eps = 0.001*dx
 
 #find constant values that work
-c1 = 10
+c1 = 1
 c2 = 100
 c3 = 100
 

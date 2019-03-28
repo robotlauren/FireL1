@@ -63,9 +63,8 @@ eps = 0.001*dx
 
 #find constant values that work
 c1 = 1
-c2 = 1
-c3 = 1
-c4 = 1
+c2 = 100
+c3 = 100
 
 m = ConcreteModel()
 
@@ -99,10 +98,10 @@ m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 # note: eps under sqrt to avoid sqrt(0)
 def ObjRule(m):
     sum1 = sum(
-        sum(sqrt(eps +(m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
+        sum(((m.v1[i,j]-(m.u[i+1,j]-m.u[i-1,j])/(2*dx))**2+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j-1])/(2*dy))**2)*dx*dy 
             for i in m.CM) for j in m.CN)
     sum2 = sum(
-        sum(sqrt(eps +((m.v1[i+1,j] + m.v1[i-1,j])/(2*dx))**2+((m.v1[i,j+1]-m.v1[i,j-1])/(2*dy)+(m.v2[i+1,j]-m.v2[i-1,j])/(2*dx))**2/2+((m.v2[i,j+1]-m.v2[i,j-1])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
+        sum((((m.v1[i+1,j] + m.v1[i-1,j])/(2*dx))**2+((m.v1[i,j+1]-m.v1[i,j-1])/(2*dy)+(m.v2[i+1,j]-m.v2[i-1,j])/(2*dx))**2/2+((m.v2[i,j+1]-m.v2[i,j-1])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
     return c1*sum1 + sum2 + c2*sum(sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
@@ -118,7 +117,7 @@ z = np.zeros((p,n))
 for i in range(p):
     for j in range(n):
         z[i,j] = m.u[i,j].value
-ax2.contour(LON, LAT, z, levels=100, cmap='jet')
+ax2.plot_surface(LON, LAT, z, cmap='jet')
 ax2.set_xlabel('Location x_ij')
 ax2.set_zlabel('Fire Arrival time u(x_ij)')
 ax2.set_title('2D L^1 Minimization')
