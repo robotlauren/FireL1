@@ -47,8 +47,8 @@ eps = 0.001*dx
 
 #find constant values that work
 c1 = 1
-c2 = 1000
-c3 = 1000
+c2 = 100
+c3 = 100
 
 m = ConcreteModel()
 
