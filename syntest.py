@@ -121,6 +121,8 @@ print(results)
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
+v1 = np.zeros((p-1,n-1))
+v2 = np.zeros((p-1,n-1))
 for i in range(p):
     for j in range(n):
         z[i,j] = m.u[i,j].value
@@ -130,8 +132,10 @@ ax2.set_zlabel('Fire Arrival time u(x_ij)')
 ax2.set_title('2D L^1 Minimization')
 plt.show()
 
-v1 = m.v1.values
-v2 = m.v2.values
+for i in range(p-1):
+    for j in range(n-1):
+        v1[i,j] = m.v1[i,j].value
+        v2[i,j] = m.v2[i,j].value
 
 #save output to matlab file
 data = {'u':z,'v1':v1,'v2':v2,'UpperBds':Up,'LowerBds':Lo,'dx':dx,'dy':dy}
