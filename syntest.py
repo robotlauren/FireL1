@@ -134,5 +134,5 @@ v1 = m.v1.values
 v2 = m.v2.values
 
 #save output to matlab file
-data = {'z':z,'v1':v1,'v2':v2,'Upper Bds':Up,'Lower Bds':Lo,'dx':dx,'dy':dy}
+data = {'u':z,'v1':v1,'v2':v2,'UpperBds':Up,'LowerBds':Lo,'dx':dx,'dy':dy}
 matback = savemat('syndata', data) # save u, v1, v2, dx, dy, Up, Lo 
