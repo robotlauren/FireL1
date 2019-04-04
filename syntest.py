@@ -94,7 +94,7 @@ def ObjRule(m):
             (
                 (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j]+m.u[i+1,j+1]-m.u[i,j+1])/(2*dx))**2+(
                     m.v2[i,j]-(
-                        m.u[i,j+1]-m.u[i,j]+m.u[i+1,j+1]-m.u[i+1,j])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
+                        m.u[i,j+1]-m.u[i,j]+m.u[i+1,j+1]-m.u[i+1,j])/(2*dy))**2)*dx*dy for i in m.VM) for j in m.VN)
     sum2 = sum(
         sum(
             (
