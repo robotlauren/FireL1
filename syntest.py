@@ -58,11 +58,13 @@ m.M = RangeSet(0,p-1)
 m.CM = RangeSet(1,p-2) #constraint indeces
 m.N = RangeSet(0,n-1)
 m.CN = RangeSet(1,n-2) #constraint indeces
+m.VM = RangeSet(0,p-2) #v indeces
+m.VN = RangeSet(0,n-2)
 
 # Variables
 m.u = Var(m.M, m.N, within=Reals)
-m.v1 = Var(m.M, m.N, within=Reals)
-m.v2 = Var(m.M, m.N, within=Reals) #new vector field v=(v1,v2)
+m.v1 = Var(m.VM, m.VN, within=Reals)
+m.v2 = Var(m.VM, m.VN, within=Reals) #new vector field v=(v1,v2)
 
 # Constraints
 # soft constraints
@@ -99,7 +101,7 @@ def ObjRule(m):
                 ((m.v1[i+1,j]-m.v1[i,j]+m.v1[i+1,j+1]-m.v1[i,j+1])/(2*dx))**2+(
                     (m.v1[i,j+1]-m.v1[i,j]+m.v1[i+1,j+1]-m.v1[i+1,j])/(2*dy)+(
                         m.v2[i+1,j]-m.v2[i,j]+m.v2[i+1,j+1]-m.v2[i,j+1])/(2*dx))**2/2+(
-                    (m.v2[i,j+1]-m.v2[i,j]+m.v2[i+1,j+1]-m.v2[i+1,j])/(2*dy))**2)*dx*dy for i in m.CM) for j in m.CN)
+                    (m.v2[i,j+1]-m.v2[i,j]+m.v2[i+1,j+1]-m.v2[i+1,j])/(2*dy))**2)*dx*dy for i in m.VM) for j in m.VN)
     return c1*sum1 + sum2 + c2*sum(
         sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(
         sum(m.eta[i,j] for i in m.M) for j in m.N)
