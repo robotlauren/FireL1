@@ -74,6 +74,9 @@ m.v2 = Var(m.VM, m.VN, within=NonNegativeReals) #new vector field v=(v1,v2)
 # to take abs value out of obj fun
 m.xnew1 = Var(m.M, m.N, within=Reals)
 m.xnew2 = Var(m.M, m.N, within=Reals)
+m.xnew3 = Var(m.M, m.N, within=Reals)
+m.xnew4 = Var(m.M, m.N, within=Reals)
+m.xnew5 = Var(m.M, m.N, within=Reals)
 
 # Constraints
 # soft constraints
@@ -90,22 +93,51 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Absolute value constraints
-def sum_1(m,i,j):
-    return abs(m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+abs(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew1[i,j]
-m.sum1 = Constraint(m.VM,m.VN, rule=sum_1)
+def sum_1up(m,i,j):
+    return (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx) <= m.xnew1[i,j]
+m.sum1up = Constraint(m.VM, m.VN, rule=sum_1up)
 
-def sum_2(m,i,j):
-    return abs((m.v1[i+1,j]-m.v1[i,j])/dx)+abs(((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2)+abs(
-                    (m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew2[i,j]
-m.sum2 = Constraint(m.TM,m.TN, rule=sum_2)
+def sum_1down(m,i,j):
+    return -(m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx) <= m.xnew1[i,j]
+m.sum1down = Constraint(m.VM, m.VN, rule=sum_1down)
+
+def sum_2up(m,i,j):
+    return (m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew2[i,j]
+m.sum2up = Constraint(m.VM, m.VN, rule=sum2_up)
+
+def sum_2down(m,i,j):
+    return -(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew2[i,j]
+m.sum2down = Constraint(m.VM, m.VN, rule=sum2_down)
+
+def sum_3up(m,i,j):
+    return ((m.v1[i+1,j]-m.v1[i,j])/dx) <= m.xnew3[i,j]
+m.sum3up = Constraint(m.TM, m.TN, rule=sum_3up)
+
+def sum_3down(m,i,j):
+    return -((m.v1[i+1,j]-m.v1[i,j])/dx) <= m.xnew3[i,j]
+m.sum3down = Constraint(m.TM, m.TN, rule=sum_3down)
+
+def sum_4up(m,i,j):
+    return (((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2) <= m.xnew4[i,j]
+m.sum4up = Constraint(m.TM, m.TN, rule=sum_4up)
+
+def sum_4down(m,i,j):
+    return -(((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2) <= m.xnew4[i,j]
+m.sum4down = Constraint(m.TM, m.TN, rule=sum_4down)
+
+def sum_5up(m,i,j):
+    return ((m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew5[i,j]
+m.sum5up = Constraint(m.TM, m.TN, rule=sum_5up)
+
+def sum_5down(m,i,j):
+    return -((m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew5[i,j]
+m.sum5down = Constraint(m.TM, m.TN, rule=sum_5down)
 
 # new obj. func for TGV:
 # made linear
 def ObjRule(m):
-    sum1 = sum(
-        sum(m.xnew1[i,j]*dx*dy for i in m.VM) for j in m.VN)
-    sum2 = sum(
-        sum(m.xnew2[i,j]*dx*dy for i in m.TM) for j in m.TN)
+    sum1 = sum(sum((m.xnew1[i,j]+m.xnew2[i,j])*dx*dy for i in m.VM) for j in m.VN)
+    sum2 = sum(sum((m.xnew3[i,j]+m.xnew4[i,j]+m.xnew5[i,j])*dx*dy for i in m.TM) for j in m.TN)
     return c1*sum1 + sum2 + c2*sum(
         sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(
         sum(m.eta[i,j] for i in m.M) for j in m.N)
