@@ -103,11 +103,11 @@ m.sum1down = Constraint(m.VM, m.VN, rule=sum_1down)
 
 def sum_2up(m,i,j):
     return (m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew2[i,j]
-m.sum2up = Constraint(m.VM, m.VN, rule=sum2_up)
+m.sum2up = Constraint(m.VM, m.VN, rule=sum_2up)
 
 def sum_2down(m,i,j):
     return -(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew2[i,j]
-m.sum2down = Constraint(m.VM, m.VN, rule=sum2_down)
+m.sum2down = Constraint(m.VM, m.VN, rule=sum_2down)
 
 def sum_3up(m,i,j):
     return ((m.v1[i+1,j]-m.v1[i,j])/dx) <= m.xnew3[i,j]
