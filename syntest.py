@@ -97,16 +97,16 @@ def ObjRule(m):
     sum1 = sum(
         sum(
             (
-                (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)**2+(
+                (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(
                     m.v2[i,j]-(
-                        m.u[i,j+1]-m.u[i,j])/dy)**2)*dx*dy for i in m.VM) for j in m.VN)
+                        m.u[i,j+1]-m.u[i,j])/dy))*dx*dy for i in m.VM) for j in m.VN)
     sum2 = sum(
         sum(
             (
-                ((m.v1[i+1,j]-m.v1[i,j])/dx)**2+(
+                ((m.v1[i+1,j]-m.v1[i,j])/dx)+(
                     (m.v1[i,j+1]-m.v1[i,j])/dy+(
-                        m.v2[i+1,j]-m.v2[i,j])/dx)**2/2+(
-                    (m.v2[i,j+1]-m.v2[i,j])/dy)**2)*dx*dy for i in m.TM) for j in m.TN)
+                        m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
+                    (m.v2[i,j+1]-m.v2[i,j])/dy))*dx*dy for i in m.TM) for j in m.TN)
     return c1*sum1 + sum2 + c2*sum(
         sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(
         sum(m.eta[i,j] for i in m.M) for j in m.N)
