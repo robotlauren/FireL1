@@ -71,6 +71,10 @@ m.u = Var(m.M, m.N, within=NonNegativeReals)
 m.v1 = Var(m.VM, m.VN, within=NonNegativeReals)
 m.v2 = Var(m.VM, m.VN, within=NonNegativeReals) #new vector field v=(v1,v2)
 
+# to take abs value out of obj fun
+m.xnew1 = Var(m.M, m.N, within=Reals)
+m.xnew2 = Var(m.M, m.N, within=Reals)
+
 # Constraints
 # soft constraints
 m.eta = Var(m.M, m.N, within=NonNegativeReals)
@@ -85,34 +89,39 @@ def X_BoundL(m,i,j):
     return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
+# Absolute value constraints
+def sum_1up(m,i,j):
+    return (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew1[i,j]
+m.sum1up = Constraint(m.VM,m.VN, rule=sum_1up)
+
+def sum_1down(m,i,j):
+    return -((m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy)) <= m.xnew1[i,j]
+m.sum1down = Constraint(m.VM,m.VN, rule=sum_1down)
+
+def sum_2up(m,i,j):
+    return (((m.v1[i+1,j]-m.v1[i,j])/dx)+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
+                    (m.v2[i,j+1]-m.v2[i,j])/dy)) <= m.xnew2[i,j]
+m.sum2up = Constraint(m.TM,m.TN, rule=sum_2up)
+
+def sum_2down(m,i,j):
+    return -(((m.v1[i+1,j]-m.v1[i,j])/dx)+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
+                    (m.v2[i,j+1]-m.v2[i,j])/dy)) <= m.xnew2[i,j]
+m.sum2down = Constraint(m.TM,m.TN, rule=sum_2down)
+
 # new obj. func for TGV:
-# new obj function using different discretization approximations
+
+#new obj function linear
 def ObjRule(m):
-#     u_x = (m.u[i+1,j]-m.u[i,j])/dx
-#     u_y = (m.u[i,j+1]-m.u[i,j])/dy
-#     v1_x = (m.v1[i+1,j]-m.v1[i,j])/dx
-#     v1_y = (m.v1[i,j+1]-m.v1[i,j])/dy
-#     v2_x = (m.v2[i+1,j]-m.v2[i,j])/dx
-#     v2_y = (m.v2[i,j+1]-m.v2[i,j])/dy
     sum1 = sum(
-        sum(
-            (
-                (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(
-                    m.v2[i,j]-(
-                        m.u[i,j+1]-m.u[i,j])/dy))*dx*dy for i in m.VM) for j in m.VN)
+        sum(m.xnew1[i,j]*dx*dy for i in m.VM) for j in m.VN)
     sum2 = sum(
-        sum(
-            (
-                ((m.v1[i+1,j]-m.v1[i,j])/dx)+(
-                    (m.v1[i,j+1]-m.v1[i,j])/dy+(
-                        m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
-                    (m.v2[i,j+1]-m.v2[i,j])/dy))*dx*dy for i in m.TM) for j in m.TN)
+        sum(m.xnew2[i,j]*dx*dy for i in m.TM) for j in m.TN)
     return c1*sum1 + sum2 + c2*sum(
         sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(
         sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
-opt = SolverFactory('ipopt')
+opt = SolverFactory('glpk')
 results = opt.solve(m)
 
 print(results)
