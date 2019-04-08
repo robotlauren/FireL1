@@ -92,12 +92,12 @@ m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 # Absolute value constraints
 def sum_1(m,i,j):
     return abs(m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+abs(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew1[i,j]
-m.sum1up = Constraint(m.VM,m.VN, rule=sum_1up)
+m.sum1 = Constraint(m.VM,m.VN, rule=sum_1)
 
 def sum_2(m,i,j):
     return abs((m.v1[i+1,j]-m.v1[i,j])/dx)+abs(((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2)+abs(
                     (m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew2[i,j]
-m.sum2up = Constraint(m.TM,m.TN, rule=sum_2up)
+m.sum2 = Constraint(m.TM,m.TN, rule=sum_2)
 
 # new obj. func for TGV:
 # made linear
