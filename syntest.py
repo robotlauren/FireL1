@@ -90,27 +90,17 @@ def X_BoundL(m,i,j):
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Absolute value constraints
-def sum_1up(m,i,j):
-    return (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew1[i,j]
+def sum_1(m,i,j):
+    return abs(m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+abs(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy) <= m.xnew1[i,j]
 m.sum1up = Constraint(m.VM,m.VN, rule=sum_1up)
 
-def sum_1down(m,i,j):
-    return -((m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(m.v2[i,j]-(m.u[i,j+1]-m.u[i,j])/dy)) <= m.xnew1[i,j]
-m.sum1down = Constraint(m.VM,m.VN, rule=sum_1down)
-
-def sum_2up(m,i,j):
-    return (((m.v1[i+1,j]-m.v1[i,j])/dx)+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
-                    (m.v2[i,j+1]-m.v2[i,j])/dy)) <= m.xnew2[i,j]
+def sum_2(m,i,j):
+    return abs((m.v1[i+1,j]-m.v1[i,j])/dx)+abs(((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2)+abs(
+                    (m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew2[i,j]
 m.sum2up = Constraint(m.TM,m.TN, rule=sum_2up)
 
-def sum_2down(m,i,j):
-    return -(((m.v1[i+1,j]-m.v1[i,j])/dx)+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
-                    (m.v2[i,j+1]-m.v2[i,j])/dy)) <= m.xnew2[i,j]
-m.sum2down = Constraint(m.TM,m.TN, rule=sum_2down)
-
 # new obj. func for TGV:
-
-#new obj function linear
+# made linear
 def ObjRule(m):
     sum1 = sum(
         sum(m.xnew1[i,j]*dx*dy for i in m.VM) for j in m.VN)
