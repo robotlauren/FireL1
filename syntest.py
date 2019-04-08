@@ -112,7 +112,7 @@ def ObjRule(m):
         sum(m.eta[i,j] for i in m.M) for j in m.N)
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
-opt = SolverFactory('ipopt')
+opt = SolverFactory('glpk')
 results = opt.solve(m)
 
 print(results)
