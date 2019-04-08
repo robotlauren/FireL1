@@ -67,9 +67,9 @@ m.TM = RangeSet(0,p-3) #TGV indeces
 m.TN = RangeSet(0,p-3)
 
 # Variables
-m.u = Var(m.M, m.N, within=Reals)
-m.v1 = Var(m.VM, m.VN, within=Reals)
-m.v2 = Var(m.VM, m.VN, within=Reals) #new vector field v=(v1,v2)
+m.u = Var(m.M, m.N, within=NonNegativeReals)
+m.v1 = Var(m.VM, m.VN, within=NonNegativeReals)
+m.v2 = Var(m.VM, m.VN, within=NonNegativeReals) #new vector field v=(v1,v2)
 
 # Constraints
 # soft constraints
@@ -96,13 +96,13 @@ def ObjRule(m):
 #     v2_y = (m.v2[i,j+1]-m.v2[i,j])/dy
     sum1 = sum(
         sum(
-            abs(
+            (
                 (m.v1[i,j]-(m.u[i+1,j]-m.u[i,j])/dx)+(
                     m.v2[i,j]-(
                         m.u[i,j+1]-m.u[i,j])/dy))*dx*dy for i in m.VM) for j in m.VN)
     sum2 = sum(
         sum(
-            abs(
+            (
                 ((m.v1[i+1,j]-m.v1[i,j])/dx)+(
                     (m.v1[i,j+1]-m.v1[i,j])/dy+(
                         m.v2[i+1,j]-m.v2[i,j])/dx)/2+(
