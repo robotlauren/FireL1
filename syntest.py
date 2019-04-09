@@ -110,11 +110,11 @@ def sum_2down(m,i,j):
 m.sum2down = Constraint(m.VM, m.VN, rule=sum_2down)
 
 def sum_3up(m,i,j):
-    return ((m.v1[i+1,j]-m.v1[i,j])/dx) + (((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2) + ((m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew3[i,j]
+    return ((m.v1[i+1,j]-m.v1[i,j])/dx+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew3[i,j]
 m.sum3up = Constraint(m.TM, m.TN, rule=sum_3up)
 
 def sum_3down(m,i,j):
-    return -((m.v1[i+1,j]-m.v1[i,j])/dx) + (((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2) + ((m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew3[i,j]
+    return -((m.v1[i+1,j]-m.v1[i,j])/dx+((m.v1[i,j+1]-m.v1[i,j])/dy+(m.v2[i+1,j]-m.v2[i,j])/dx)/2+(m.v2[i,j+1]-m.v2[i,j])/dy) <= m.xnew3[i,j]
 m.sum3down = Constraint(m.TM, m.TN, rule=sum_3down)
 
 # def sum_4up(m,i,j):
