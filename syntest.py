@@ -75,8 +75,8 @@ m.v2 = Var(m.VM, m.VN, within=NonNegativeReals) #new vector field v=(v1,v2)
 m.xnew1 = Var(m.M, m.N, within=Reals)
 m.xnew2 = Var(m.M, m.N, within=Reals)
 m.xnew3 = Var(m.M, m.N, within=Reals)
-# m.xnew4 = Var(m.M, m.N, within=Reals)
-# m.xnew5 = Var(m.M, m.N, within=Reals)
+m.xnew4 = Var(m.M, m.N, within=Reals)
+m.xnew5 = Var(m.M, m.N, within=Reals)
 
 # Constraints
 # soft constraints
