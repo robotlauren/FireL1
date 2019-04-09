@@ -137,7 +137,7 @@ m.sum5down = Constraint(m.TM, m.TN, rule=sum_5down)
 # made linear
 def ObjRule(m):
     sum1 = sum(sum((m.xnew1[i,j]+m.xnew2[i,j])*dx*dy for i in m.VM) for j in m.VN)
-    sum2 = sum(sum((m.xnew3[i,j]+xnew4[i,j]+xnew5[i,j])*dx*dy for i in m.TM) for j in m.TN)
+    sum2 = sum(sum((m.xnew3[i,j]+m.xnew4[i,j]+m.xnew5[i,j])*dx*dy for i in m.TM) for j in m.TN)
     return c1*sum1 + sum2 + c2*sum(
         sum(m.xi[i,j] for i in m.M) for j in m.N)+c3*sum(
         sum(m.eta[i,j] for i in m.M) for j in m.N)
