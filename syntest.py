@@ -36,8 +36,12 @@ Lo = np.array(mat['L']).astype(float)
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
 fig1.suptitle("Plotting the data scaled to fit")
+ax2.set_xlabel('Latitude')
+ax2.set_ylabel('Longitude')
+ax2.set_zlabel('Fire Arrival Time (days)')
 ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
+plt.show()
 
 p,n = Up.shape
 dx = 1./p
