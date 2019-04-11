@@ -37,8 +37,8 @@ Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
 a,b = Up.shape
-for i in range(a):
-    for j in range(b):
+for i in range(a-1):
+    for j in range(b-1):
         Up[i,j] = (Up[i,j]+Up[i+1,j]+Up[i,j+1]+Up[i+1,j+1])/4
         Lo[i,j] = (Lo[i,j]+Lo[i+1,j]+Lo[i,j+1]+Lo[i+1,j+1])/4
 
