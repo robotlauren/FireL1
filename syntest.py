@@ -146,6 +146,7 @@ def ObjRule(m):
     
 m.Obj = Objective(rule=ObjRule, sense=minimize)
 opt = SolverFactory('glpk')
+opt.options['dual'] # use Dual Simplex method
 results = opt.solve(m)
 
 print(results)
