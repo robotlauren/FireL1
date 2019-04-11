@@ -29,15 +29,15 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-X = X[::2] # try with every other data point
-Y = Y[::2]
+X = X[::2,::2] # try with every other data point
+Y = Y[::2,::2]
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-Up = Up[::2]
-Lo = Lo[::2]
+Up = Up[::2,::2]
+Lo = Lo[::2,::2]
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
