@@ -29,8 +29,8 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-# X = X[::2] # try with every other data point
-# Y = Y[::2]
+X = np.delete(X, slice(None, None, 3)) # remove every 3rd data point
+Y = np.delete(Y, slice(None, None, 3))
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
