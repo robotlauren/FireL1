@@ -167,8 +167,9 @@ for i in range(p):
     for j in range(n):
         z[i,j] = m.u[i,j].value
 ax2.plot_surface(X, Y, z, cmap='jet')
-ax2.set_xlabel('Location x_ij')
-ax2.set_zlabel('Fire Arrival time u(x_ij)')
+ax2.set_xlabel('Latitude')
+ax2.set_ylabel('Longitude')
+ax2.set_zlabel('Fire Arrival Time (days)')
 ax2.set_title('2D L^1 Minimization')
 plt.show()
 
