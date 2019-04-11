@@ -49,6 +49,7 @@ ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
 p,n = Up.shape
+print(p,n)
 dx = 1./p
 dy = 1./n
 
