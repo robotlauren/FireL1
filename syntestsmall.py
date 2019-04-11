@@ -36,8 +36,8 @@ Y = mat['Y']
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-Up = del Up[::3]
-Lo = del Lo[::3]
+Up = np.delete(Up, slice(None, None, 3))
+Lo = np.delete(Lo, slice(None, None, 3))
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
