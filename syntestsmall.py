@@ -4,6 +4,7 @@ import os
 from scipy.io import loadmat
 from scipy.io import savemat
 import matplotlib as mpl
+mpl.use('TKAgg')
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
@@ -28,15 +29,18 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-X = X[::2]
-Y = Y[::2]
+# X = X[::2] # try with every other data point
+# Y = Y[::2]
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-Up = Up[::2]
-Lo = Lo[::2]
+a,b = Up.shape
+for i in range(a):
+    for j in range(b):
+        Up[i,j] = (Up[i,j]+Up[i+1,j]+Up[i,j+1]+Up[i+1,j+1])/4
+        Lo[i,j] = (Lo[i,j]+Lo[i+1,j]+Lo[i,j+1]+Lo[i+1,j+1])/4
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
@@ -63,10 +67,8 @@ m = ConcreteModel()
 
 # Sets, Parameters, and Variables
 
-m.M = RangeSet(0,p-1)
-m.CM = RangeSet(1,p-2) #constraint indeces
+m.M = RangeSet(0,p-1) 
 m.N = RangeSet(0,n-1)
-m.CN = RangeSet(1,n-2) #constraint indeces
 
 m.VM = RangeSet(0,p-2) #v indeces
 m.VN = RangeSet(0,n-2)
