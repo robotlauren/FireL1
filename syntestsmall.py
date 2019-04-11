@@ -29,15 +29,15 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-X = np.delete(X, slice(None, None, 3)) # remove every 3rd data point
-Y = np.delete(Y, slice(None, None, 3))
+X = X[::2] # try with every other data point
+Y = Y[::2]
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-Up = np.delete(Up, slice(None, None, 3))
-Lo = np.delete(Lo, slice(None, None, 3))
+Up = Up[::2]
+Lo = Lo[::2]
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
@@ -49,7 +49,7 @@ ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
 p,n = Up.shape
-print(p,n)
+print(Up.shape)
 dx = 1./p
 dy = 1./n
 
