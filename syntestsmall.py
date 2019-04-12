@@ -29,15 +29,17 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-# X = X[::2,::2] # try with every other data point
-# Y = Y[::2,::2]
+maxsize = 100 #coarsen mesh
+coarsening=np.int(1+np.max(X.shape)/maxsize)
+X = X[0::coarsening,0::coarsening]
+Y = Y[0::coarsening,0::coarsening]
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-# Up = Up[::2,::2]
-# Lo = Lo[::2,::2]
+Up = Up[0::coarsening,0::coarsening]
+Lo = Lo[0::coarsening,0::coarsening]
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
@@ -49,7 +51,6 @@ ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
 p,n = Up.shape
-p,n = p/2, n/2 # coarsen mesh
 print(p,n)
 dx = 1./p
 dy = 1./n
@@ -162,12 +163,10 @@ print(results)
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
-x = X/2
-y = Y/2
 for i in range(p):
     for j in range(n):
         z[i,j] = m.u[i,j].value
-ax2.plot_surface(x, y, z, cmap='jet')
+ax2.plot_surface(X, Y, z, cmap='jet')
 ax2.set_xlabel('Latitude')
 ax2.set_ylabel('Longitude')
 ax2.set_zlabel('Fire Arrival Time (days)')
