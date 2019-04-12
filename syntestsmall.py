@@ -162,11 +162,12 @@ print(results)
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
 z = np.zeros((p,n))
-
+x = X/2
+y = Y/2
 for i in range(p):
     for j in range(n):
         z[i,j] = m.u[i,j].value
-ax2.plot_surface(X/2, Y/2, z, cmap='jet')
+ax2.plot_surface(x, y, z, cmap='jet')
 ax2.set_xlabel('Latitude')
 ax2.set_ylabel('Longitude')
 ax2.set_zlabel('Fire Arrival Time (days)')
