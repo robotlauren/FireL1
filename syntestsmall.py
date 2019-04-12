@@ -48,7 +48,7 @@ ax1.set_zlabel('Fire Arrival Time (days)')
 ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
-p,n = Up.shape
+p,n = Up.shape/2
 print(Up.shape)
 dx = 1./p
 dy = 1./n
@@ -93,11 +93,11 @@ m.xi = Var(m.M, m.N, within=NonNegativeReals)
 
 # Upper and lower bounds
 def X_BoundU(m,i,j):
-    return m.u[2*i,2*j] - Up[2*i,2*j] - m.xi[2*i,2*j] <= 0 #constrain every other point
+    return m.u[i,j] - Up[i,j] - m.xi[i,j] <= 0 #constrain every other point
 m.XboundU = Constraint(m.M, m.N, rule=X_BoundU)
 
 def X_BoundL(m,i,j):
-    return m.u[2*i,2*j] - Lo[2*i,2*j] + m.eta[2*i,2*j] >= 0
+    return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Absolute value constraints
