@@ -93,11 +93,11 @@ m.xi = Var(m.M, m.N, within=NonNegativeReals)
 
 # Upper and lower bounds
 def X_BoundU(m,i,j):
-    return m.u[2i,2j] - Up[2i,2j] - m.xi[2i,2j] <= 0 #constrain every other point
+    return m.u[2*i,2*j] - Up[2*i,2*j] - m.xi[2*i,2*j] <= 0 #constrain every other point
 m.XboundU = Constraint(m.M, m.N, rule=X_BoundU)
 
 def X_BoundL(m,i,j):
-    return m.u[2i,2j] - Lo[2i,2j] + m.eta[2i,2j] >= 0
+    return m.u[2*i,2*j] - Lo[2*i,2*j] + m.eta[2*i,2*j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Absolute value constraints
