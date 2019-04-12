@@ -49,6 +49,7 @@ ax1.set_ylabel('Longitude')
 ax1.set_zlabel('Fire Arrival Time (days)')
 ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
+plt.show()
 
 p,n = Up.shape
 print(p,n)
