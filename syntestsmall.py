@@ -29,25 +29,15 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-X = X[::2,::2] # try with every other data point
-Y = Y[::2,::2]
-
-# X = np.delete(X, list(range(0, X.shape[0], 3)), axis=0) # try with every 3rd data point removed
-# X = np.delete(X, list(range(0, X.shape[1], 3)), axis=1)
-# Y = np.delete(Y, list(range(0, Y.shape[0], 3)), axis=0)
-# Y = np.delete(Y, list(range(0, Y.shape[1], 3)), axis=1)
+# X = X[::2,::2] # try with every other data point
+# Y = Y[::2,::2]
 
 # Upper and Lower bounds for synthetic test
 Up = np.array(mat['U']).astype(float)
 Lo = np.array(mat['L']).astype(float)
 
-Up = Up[::2,::2]
-Lo = Lo[::2,::2]
-
-# Up = np.delete(Up, list(range(0, Up.shape[0], 3)), axis=0)
-# Up = np.delete(Up, list(range(0, Up.shape[1], 3)), axis=1)
-# Lo = np.delete(Lo, list(range(0, Lo.shape[0], 3)), axis=0)
-# Lo = np.delete(Lo, list(range(0, Lo.shape[1], 3)), axis=1)
+# Up = Up[::2,::2]
+# Lo = Lo[::2,::2]
 
 fig1 = plt.figure()
 ax1 = fig1.gca(projection='3d')
@@ -103,11 +93,11 @@ m.xi = Var(m.M, m.N, within=NonNegativeReals)
 
 # Upper and lower bounds
 def X_BoundU(m,i,j):
-    return m.u[i,j] - Up[i,j] - m.xi[i,j] <= 0
+    return m.u[2i,2j] - Up[2i,2j] - m.xi[2i,2j] <= 0 #constrain every other point
 m.XboundU = Constraint(m.M, m.N, rule=X_BoundU)
 
 def X_BoundL(m,i,j):
-    return m.u[i,j] - Lo[i,j] + m.eta[i,j] >= 0
+    return m.u[2i,2j] - Lo[2i,2j] + m.eta[2i,2j] >= 0
 m.XboundL = Constraint(m.M, m.N, rule=X_BoundL)
 
 # Absolute value constraints
