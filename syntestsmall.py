@@ -29,7 +29,7 @@ case = sys.argv[1].split('/')[-1].split('.mat')[0]
 X = mat['X']
 Y = mat['Y']
 
-maxsize = 125 #coarsen mesh
+maxsize = 150 #coarsen mesh
 coarsening=np.int(1+np.max(X.shape)/maxsize)
 X = X[0::coarsening,0::coarsening]
 Y = Y[0::coarsening,0::coarsening]
