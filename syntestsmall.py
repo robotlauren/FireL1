@@ -48,7 +48,8 @@ ax1.set_zlabel('Fire Arrival Time (days)')
 ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
-p,n = Up.shape/2
+p,n = Up.shape
+p,n = p/2, n/2
 print(Up.shape)
 dx = 1./p
 dy = 1./n
