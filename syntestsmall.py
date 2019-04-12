@@ -49,8 +49,8 @@ ax1.scatter(X, Y, Up, c='red')
 ax1.scatter(X, Y, Lo, c='blue')
 
 p,n = Up.shape
-p,n = p/2, n/2
-print(Up.shape)
+p,n = p/2, n/2 # coarsen mesh
+print(p,n)
 dx = 1./p
 dy = 1./n
 
