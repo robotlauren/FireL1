@@ -8,26 +8,17 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
-import random as rd
+from datetime import datetime
 
 from pyomo.environ import *
 from pyomo.dae import *
 from pyomo.opt import SolverFactory
 
-def L1min():
-    if len(sys.argv) != 2:
-        print 'Error: python %s matlab_file' % sys.argv[0]
-        sys.exit(1)
-    else:
-        matlab_file=sys.argv[1]
-    if (not os.path.isfile(matlab_file)) or (not os.access(matlab_file,os.R_OK)):
-        print 'Error: file %s not exist or not readable' % sys.argv[1]
-        sys.exit(1)
-
+def L1min(file):
     mat = loadmat(sys.argv[1])
     case = sys.argv[1].split('/')[-1].split('.mat')[0]
 
-    if mat['fxlon'] == True: #check if real data
+    if 'fxlon' in mat.keys(): #check if real data
         ### from realtest
         scale = mat['time_scale_num'][0]
         LON = mat['fxlon']
@@ -61,8 +52,8 @@ def L1min():
 
     else: # check if synthetic data
         ### from syntest
-        X = mat['X']
-        Y = mat['Y']
+        LON = mat['X']
+        LAT = mat['Y']
 
         # Upper and Lower bounds for synthetic test
         Up = np.array(mat['U']).astype(float)
@@ -176,29 +167,43 @@ def L1min():
     opt = SolverFactory('glpk')
     opt.options['dual'] # use Dual Simplex method
     results = opt.solve(m)
-
-    print(results)
-
-    #plot results
-    fig2 = plt.figure()
-    ax2 = fig2.gca(projection='3d')
+    
+    #save output to matlab file
     z = np.zeros((p,n))
     v1 = np.zeros((p-1,n-1))
     v2 = np.zeros((p-1,n-1))
     for i in range(p):
         for j in range(n):
             z[i,j] = m.u[i,j].value
-    ax2.plot_surface(X, Y, z, cmap='jet')
-    ax2.set_xlabel('Location x_ij')
-    ax2.set_zlabel('Fire Arrival time u(x_ij)')
-    ax2.set_title('2D L^1 Minimization')
-    plt.show()
-
     for i in range(p-1):
         for j in range(n-1):
             v1[i,j] = m.v1[i,j].value
             v2[i,j] = m.v2[i,j].value
-
-    #save output to matlab file
+            
+    now = str(datetime.now())[0:-7].replace(' ','_')
+ 
     data = {'u':z,'v1':v1,'v2':v2,'UpperBds':Up,'LowerBds':Lo,'dx':dx,'dy':dy}
-    matback = savemat('syndata', data) # save u, v1, v2, dx, dy, Up, Lo 
+    matback = savemat('l1result'+ now, data) # save u, v1, v2, dx, dy, Up, Lo 
+
+    return results, LON, LAT, z
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print 'Error: python %s matlab_file' % sys.argv[0]
+        sys.exit(1)
+    else:
+        matlab_file=sys.argv[1]
+    if (not os.path.isfile(matlab_file)) or (not os.access(matlab_file,os.R_OK)):
+        print 'Error: file %s not exist or not readable' % sys.argv[1]
+        sys.exit(1)
+    results, X,Y,Z = L1min(sys.argv[1])
+    
+    #plot results
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.plot_surface(X, Y, Z, cmap='jet')
+    ax.set_xlabel('Latitude')
+    ax.set_ylabel('Longitude')
+    ax.set_zlabel('Fire Arrival Time (days)')
+    ax.set_title('2D L^1 Minimization')
+    plt.show()
