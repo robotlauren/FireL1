@@ -15,8 +15,7 @@ from pyomo.dae import *
 from pyomo.opt import SolverFactory
 
 def L1min(file):
-    mat = loadmat(sys.argv[1])
-    case = sys.argv[1].split('/')[-1].split('.mat')[0]
+    mat = loadmat(file)
 
     if 'fxlon' in mat.keys(): #check if real data
         ### from realtest
